@@ -1,0 +1,172 @@
+waypoints:
+  soul-station:
+    world: Skyloft
+    x: -1144
+    y: 38
+    z: -496
+    name: Soul Station
+    desc: Gathering point for lost travelers.
+    displayname: <gradient:#439cfb:#f187fb>Soul Station</gradient>
+    icon: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNjE1NjEwMTI5ODJjMjBkNDBjNjA0YjJkYjllZGRiODQ3OTk0NDcxNWI5MWVmYmMxMmRmYWIxNzc1Yzg2MTBhIn19fQ==
+  ibis-island:
+    world: Skyloft
+    x: 15
+    y: 93
+    z: 84
+    name: Ibis Island
+    desc: Home town of the peaceful Ibyans.
+    displayname: <gradient:#ebf4f5:#aab2ff>Ibis Island</gradient>
+    icon: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWRiZDhiNmNiM2IxZWNkOWNhMzU5YjgzM2MxYmVmMjJlOTczMmZiN2FhMGQwZmY0ZmI1NTg4ODZmNWE2YSJ9fX0=
+  ibya-forest:
+    world: Skyloft
+    x: -533
+    y: 136
+    z: -41
+    name: Ibya Forest
+    desc: These Ibyan forests have swallowed quite a few secrets.
+    displayname: <gradient:#ebf4f5:#82f4b1>Ibya Forest</gradient>
+    icon: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZWM2MzU3NmJlYzRhOWQ3YjJlNzE4NDM1YzA5ZDU5MWQxZmZhMTIxMDcxMWI0YjJkMzQ3YTRmMWQzZGEzZiJ9fX0=
+  ibya-grove:
+    world: Skyloft
+    x: -626
+    y: 122
+    z: -297
+    name: Ibya Grove
+    desc: Former site of Ibyan knowledge.
+    displayname: <gradient:#ebf4f5:#82f4b1>Ibya Grove</gradient>
+    icon: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTJmZWJhMWYzMDVmOTU4NDc2ZGYxOWNjZDg5Mzc3OGM2ZTM0YWExN2U4ZmZlZGU0MTMzYjNhNWYzNDRmZDhlIn19fQ==
+  sanctuary:
+    world: Skyloft
+    x: -792
+    y: 90
+    z: -438
+    name: Howling Sanctuary
+    desc: Decayed remains of Faelan and the Blightfurs.
+    displayname: <gradient:#ebf4f5:#82f4b1>Howling Sanctuary</gradient>
+    icon: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMmZjMGNiN2U0MzAwNTk2Yzk5NzEwYzdjOGU4YjAyYmU2YzQzMDUzYjhmNDAwY2EzOWNkN2E3NTZhODUwYTg3NSJ9fX0=
+  aridia-city:
+    world: Skyloft
+    x: -328
+    y: 89
+    z: -434
+    name: Aridia City
+    desc: Thriving town in the Aridia region.
+    displayname: <gradient:#f1e1c2:#fcbc98>Aridia City</gradient>
+    icon: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYWM5ZDhkNjJmNzkyZWQyNWI3YzY4ZTk0MmRhYzhkZjU5MjMzMGJjMDA3NzAzMDMxNmE5MjA1YWE1YjFlMDNlNyJ9fX0=
+  blazing-sands:
+    world: Skyloft
+    x: -9
+    y: 204
+    z: -524
+    name: Blazing Sands
+    desc: Shunned place of ancient spirits.
+    displayname: <gradient:#f1e1c2:#fcbc98>Blazing Sands</gradient>
+    icon: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNWZlODBiMTJlZTliZTg5OTlhZWZlNmY0NmUzYTI5YWJhYWM1MjA2Yzg3N2IwNzU5MTliMzY0NmQ0NDc0ZjFhYSJ9fX0=
+  monolith:
+    world: Skyloft
+    x: 129
+    y: 186
+    z: -809
+    name: Monolith
+    desc: Seal prison of the Sigmis plague.
+    displayname: <gradient:#f1e1c2:#fcbc98>Monolith</gradient>
+    icon: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYWEyYzRiN2ZjNWMwZjU1ZGMzMzcxMTJiNGM0ZDE3MDc1NTVhYzc4YmE5ZDg4ZTdmZWY2NmQ4ZjZhNzdkNDUifX19
+  archives:
+    world: Skyloft
+    x: 35
+    y: 197
+    z: -219
+    name: Archives
+    desc: Research site of Aridos and his foxes.
+    displayname: <gradient:#f1e1c2:#fcbc98>Archives</gradient>
+    icon: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDY4MjQxMWRiNTRiMTExZjZhOTAzNTgyZTllMzU5YTVkZWJlMmM5NTk0MjZmOTYyZjUzZjQ1ZDY3OGI1NzkxNyJ9fX0=
+  caelum-gravis:
+    world: Skyloft
+    x: -166
+    y: 145
+    z: -304
+    name: Caelum Gravis
+    desc: Portable tower for invasion purposes.
+    displayname: <gradient:#f1e1c2:#fcbc98>Caelum Gravis</gradient>
+    icon: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNmQxYzUyZDMzNTc4YjBhYWI5NTA3NGE4YjY1MjM4OTFlNjZhNWEyNzI5YjVlOTA0NzE1MmM5MzNhNjJlODFlNyJ9fX0=
+  slipslide-ride:
+    world: Skyloft
+    x: 631
+    y: 246
+    z: 755
+    name: Slipslide Ride
+    desc: Fun & enjoyment in the midst of isolation.
+    displayname: <gradient:#ebf4f5:#45cde9>Slipslide Ride</gradient>
+    icon: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGVjOTRlZWY2MWEzZTBmZTM4YjBjNjhmZDg3M2Y3OTBhMGQ1NjU5MGI5MDRjZmY0MzM4NDY1NzVmMWU1MThlIn19fQ==
+  nelclair-manor:
+    world: Skyloft
+    x: 3
+    y: 153
+    z: 890
+    name: Nelclair Manor
+    desc: The home of the Nelclair family for generations.
+    displayname: <gradient:#ebf4f5:#45cde9>Nelclair Manor</gradient>
+    icon: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2QyNWU0NjcxOWY5NjdiMzNjMjk3ZWQxNGE1MWJlOTRlZDY0YmJlZDM2MmFhYzkxYzc5ZjM5MDNlMWVhNDkxIn19fQ==
+  rosellas-will:
+    world: Skyloft
+    x: -111
+    y: 162
+    z: 711
+    name: Rosellas Will
+    desc: A sacred place of faith beyond the known gods.
+    displayname: <gradient:#ebf4f5:#45cde9>Rosellas Will</gradient>
+    icon: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYWUzN2FjOTJjNTdmYjEyOGMyZWU3OWQyNjU4OWUxNzM2N2IwNGViMzRiYjUyODc4ZmZhYzEwOGFmYTlhNWJlYyJ9fX0=
+  ylien:
+    world: Skyloft
+    x: 301
+    y: 152
+    z: 728
+    name: Ylien
+    desc: Former city of art & music in Hjortuns realm.
+    displayname: <gradient:#ebf4f5:#45cde9>Ylien</gradient>
+    icon: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODVkYmFiNzdkMmYwMmMxMDBhZDA3MDI4YzU4ZTA5ZWIyOWQyNjM3M2MxMTFkNWM1YmViMWY2ZmNmNzk3MzQxMCJ9fX0=
+  aerum-aeternum:
+    world: Skyloft
+    x: -2232
+    y: 94
+    z: -1235
+    name: Aerum Aeternum
+    desc: Temple for the purpose of exploring the way of the dragon.
+    displayname: <gradient:#ebf4f5:#c5aef2>Aerum Aeternum</gradient>
+    icon: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzVjZTVkODc5MjM1NWY0MTg2YzM4NjEwMjllNjIwYzM3MWFlNGRkOGQ4Nzc0MTA0N2VkNmIyNzA0OWRkNmZlYyJ9fX0=
+  aerum-tower:
+    world: Skyloft
+    x: -2203
+    y: 154
+    z: -1267
+    name: Aerum Tower
+    desc: Inner sanctum and place of abode of Lasya.
+    displayname: <gradient:#ebf4f5:#c5aef2>Aerum Tower</gradient>
+    icon: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDU5YTY4M2U1MjlhMzA3OGI5NjI4ODdkOTZjNjM4MzM2NWNkZTIwMTIzZTkwMGJjOGVkNjZjMDBhMDVhNTg0In19fQ==
+  outpost:
+    world: Skyloft
+    x: -1835
+    y: 39
+    z: -2097
+    name: Outpost
+    desc: Built post on the edge of a forgotten land.
+    displayname: <gradient:#ebf4f5:#82f4b1>Outpost</gradient>
+    icon: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzg0MDE2NmJhMmJkOTNlMDM2YTM2MjA5ZjZlMGJiNzI4ZWFiNjk2ZTJjMTg4MjkwMmUzMmVjOWJjMThlNTIxYiJ9fX0=
+  ybmashra:
+    world: Skyloft
+    x: -1586
+    y: 105
+    z: -1995
+    name: Ybmashra
+    desc: Infested temple of the ancient Ibyans.
+    displayname: <gradient:#ebf4f5:#82f4b1>Ybmashra</gradient>
+    icon: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDkzNGE5ZjVhYjE3ODlhN2Q4ZGQ5NmQzMjQ5M2NkYWNmZjU3N2Q4YzgxZTdiMjM5MTdkZmYyZTMyYmQwYmMxMCJ9fX0=
+  mistwhisper-woods:
+    world: Skyloft
+    x: -1354
+    y: 39
+    z: -2235
+    name: Mistwhisper Woods
+    desc: Forgotten grove of an old fairy tale.
+    displayname: <gradient:#ebf4f5:#82f4b1>Mistwhisper Woods</gradient>
+    icon: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDY4YzFmYTRhMjFiYTRmMjdkY2IzMGFiM2JmYWIwZGMyMmExZTRmY2Y5ZWQxMmMxZDdhNzBmZWIwN2Y4ZDdhZSJ9fX0=
