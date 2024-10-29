@@ -11,7 +11,7 @@
 - **Visual Effects**: Beautiful particle effects when selecting a destination.
 - **Additional Features**:
     - Persistent main menu page, keeping players in the same spot when they return from settings.
-    - Fully customizable waypoints—edit names, descriptions, icons, and locations through the [Waypoints YAML](waypoints.yml) file.
+    - Fully customizable waypoints—edit names, descriptions, icons, and locations through the [Waypoints YAML](../waypoints.yml) file.
     - Special message when unlocking a new waypoint.
     - ...
 
@@ -25,11 +25,11 @@
 > - **Skript-Particle**
 > - **SkJson**
 
-> This guide will help you set up the [Waystone](scripts/Global.Waystone.sk). The term “Waystone” ensures compatibility with other plugins that use `/waypoint`.
+> This guide will help you set up the [Waystone](Global.Waystone.sk). The term “Waystone” ensures compatibility with other plugins that use `/waypoint`.
 
-1. Install both [Waystone](scripts/Global.Waystone.sk) and [LocationEventWaystone](scripts/Global.LocationEventWaystone).
+1. Install both [Waystone](Global.Waystone.sk) and [LocationEventWaystone](Global.LocationEventWaystone).
 2. Adjust the options in the files as desired.
-3. Add waypoints to the [Waypoints YAML](waypoints.yml) file in the following format:
+3. Add waypoints to the [Waypoints YAML](../waypoints.yml) file in the following format:
     ```yaml
     unique-id-of-the-waypoint:
         world: world
