@@ -1,0 +1,8 @@
+on shoot:                                                                                          # On shoot
+	if projectile is an arrow:                                                                     # Fired entity is an arrow
+		#uncolored shooter's tool's name contains "Oak Bow"                                        # Has correct name
+		nbt compound of shooter's tool has tag "MYTHIC_TYPE"                                       # Bow has been given by MythicMobs
+		wait 1 tick
+		remove shooter's held item from shooter's inventory                                        # Remove the bow
+		play sound "entity.zombie.break_wooden_door" with volume 0.4 with pitch 1.4 to shooter     # Play sound
+		#remove 1 arrow from shooter's inventory                                                    # Remove arrow from inventory due to bug

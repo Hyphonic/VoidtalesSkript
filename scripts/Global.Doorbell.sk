@@ -1,0 +1,6 @@
+on right click on spruce button:
+	block 3 below event-block is a block of emerald
+	redstone power of event-block is not 15
+	play sound "block.bell.use" with volume 0.1 to player
+	wait 5 ticks
+	play sound "block.bell.use" with volume 0.1 to player

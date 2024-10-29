@@ -1,0 +1,4 @@
+command /beautify [<text>]:
+	permission: op
+	trigger:
+		set player's tool's name to mini message from "<gradient:#84ffc9:#aab2ff:#eca0ff>%arg-1%</gradient>"

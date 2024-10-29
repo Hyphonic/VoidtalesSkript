@@ -1,0 +1,77 @@
+# Options -----------------------------------
+
+Options:
+	Offset: 2 # Change this to how many pages come in front of the quests
+	BookName: "&dGuide" # What the book should be called (!) Must have a color code in it (!)
+
+# -------------------------------------------
+
+on first join:
+	give written book named {@BookName} with lore "&7A weathered leather-bound journal filled with notes, maps, and mysterious markings. It seems to chronicle%nl%&7your journey, offering tips and reminders along the way." to player
+
+command /givejournal [<player>]:
+	trigger:
+		give written book named {@BookName} with lore "&7A weathered leather-bound journal filled with notes, maps, and mysterious markings. It seems to chronicle%nl%&7your journey, offering tips and reminders along the way." to arg-1
+
+command /journal:
+	trigger:
+		set {_quests_names} to the placeholder "quests_player_current_quest_names" of player
+		set {_quests_list::*} to {_quests_names} split at nl
+
+		loop (size of {_quests_list::*}) times:
+			send quests(player, loop-value, true) to player
+
+
+function quests(p: player, w: number, t: boolean) :: text:
+	set {_quests_names} to the placeholder "quests_player_current_quest_names" of {_p}
+	set {_quests_list::*} to {_quests_names} split at nl
+	set {_quests_objective} to the placeholder "quests_player_current_objectives_%{_quests_list::%{_w}%}%" of {_p}
+	if {_t} is true:
+		return mini message from "<gradient:#7ef29d:#0f68a9>%{_quests_list::%{_w}%}%</gradient>: &f%uncolored {_quests_objective}%"
+	else if {_t} is false:
+		return mini message from "<gradient:#7ef29d:#0f68a9>%{_quests_list::%{_w}%}%</gradient>: <br><br>&8%uncolored {_quests_objective}%"
+
+function book(p: player):
+	play sound "item.armor.equip_generic" to {_p}
+	set {_book} to written book
+
+	set {_quests_names} to the placeholder "quests_player_current_quest_names" of {_p}
+	set {_quests_list::*} to {_quests_names} split at nl
+
+	#if (size of {_quests_list::*}) is 0:
+		#set page 1 of {_book} to mini message from "<gradient:#909090:#000000><u>    Table Of Contents    </u></gradient><br><br>2 <gray>---</gray> <gradient:#f492f0:#a18dce>Foreword</gradient> %nl%3 <gray>---</gray> <gradient:#07c8f9:#0d41e1>Personal Notes</gradient>"
+	#else:
+	set page 1 of {_book} to mini message from "<dark_gray><u>    Table Of Contents    </u></dark_gray><br><br>2 <gray>---</gray> <gradient:#f492f0:#a18dce>Foreword</gradient> %nl%3 <gray>---</gray> <gradient:#7ef29d:#0f68a9>Quests</gradient> %nl%%(size of {_quests_list::*})+3% <gray>---</gray> <gradient:#07c8f9:#0d41e1>Personal Notes</gradient>"
+
+	set page 2 of {_book} to mini message from "<gradient:#f492f0:#a18dce>Foreword</gradient>: %nl%%nl%&0This journal is not just a simple book, it is my faithful companion, my witness and my reminder. It will help me to keep track of the challenges that lie ahead."	
+
+
+	#send size of {_quests_list::*} to {_p} if {_p} is op
+	loop (size of {_quests_list::*}) times:
+		set page loop-value+{@Offset} of {_book} to quests({_p}, loop-value, false)
+
+	set page (size of {_quests_list::*})+{@Offset}+1 of {_book} to mini message from "<gradient:#07c8f9:#0d41e1>Waypoints</gradient>: %nl%%nl%&0I discovered a waypoint today - purple beams of light rising majestically into the sky. These radiant pillars connect the places I have already explored and they feel like familiar signposts."
+	set page (size of {_quests_list::*})+{@Offset}+2 of {_book} to mini message from "<gradient:#07c8f9:#0d41e1>Soul Station</gradient>: %nl%%nl%&0The Soul Station is a strange place. The boundaries between worlds seem to blur here. The air is filled with a mysterious energy, and I can hear the whispers of other souls who have been here before me. %nl%I believe that I can travel to other worlds from here"
+	set page (size of {_quests_list::*})+{@Offset}+3 of {_book} to mini message from "<gradient:#07c8f9:#0d41e1>Agnes</gradient>: %nl%%nl%&0It turns out that I can sell my monster materials to Agnes at the Soul Station. %nl%%nl%She seems to buy everything from creature skins to the bones I have found."
+	set page (size of {_quests_list::*})+{@Offset}+4 of {_book} to mini message from "<gradient:#07c8f9:#0d41e1>The formless mass</gradient>: %nl%%nl%I have made a strange discovery - the formless mass. This object, which comes from the Void, is more than just a mystery. It seems to be able to change its shape, and with it its abilities. You can reshape this mass at the Soul Station if you have the necessary unlock."
+	set page (size of {_quests_list::*})+{@Offset}+5 of {_book} to mini message from "<gradient:#07c8f9:#0d41e1>Slotty</gradient>: %nl%%nl%There's this strange creature, Slotty. I'm sure it's not from this world - it just looks too strange. But even stranger is what it can do: Slotty eats tokens. And not only that, it seems to be able to turn these tokens into random objects."
+	set page (size of {_quests_list::*})+{@Offset}+6 of {_book} to mini message from "<gradient:#07c8f9:#0d41e1>Library tower</gradient>: %nl%%nl%The library tower at the Soul Station is really fascinating. You simply stand in the beam and every book you hold is immediately transformed into knowledge. But be careful... I have to be careful not to use this guide book by mistake."
+	set page (size of {_quests_list::*})+{@Offset}+7 of {_book} to mini message from "<gradient:#07c8f9:#0d41e1>Vases</gradient>: %nl%%nl%Someone must have scattered these vases everywhere... whoever it was, no one seems to mind destroying them. And the crazy thing is: they keep coming back! Sometimes I find really useful items in them."
+	set page (size of {_quests_list::*})+{@Offset}+8 of {_book} to mini message from "<gradient:#07c8f9:#0d41e1>Money</gradient>: %nl%%nl%It's amazing how every enemy I defeat earns me money! But be careful: if I die, I lose everything! This makes me think strategically about my spending. Somewhere in between, I should invest my money well to make sure I'm better equipped in the next fight."
+	set page (size of {_quests_list::*})+{@Offset}+9 of {_book} to mini message from "<gradient:#07c8f9:#0d41e1>Abyssal Tears</gradient>: %nl%%nl%These Abyssal Tears are shimmering objects that come from the Void. They seem to be the key to the portals that the Everwalker opens. Some want their power, others seem to be drawn to them. It is certain that without them I could never cross the borders of Soul Station."
+	set page (size of {_quests_list::*})+{@Offset}+10 of {_book} to mini message from "<gradient:#07c8f9:#0d41e1>Everwalker</gradient>: %nl%%nl%The Everwalker is a being that was somehow bound to the Soul Station. No one knows exactly why he is trapped, but his task is clear: to open the portals. It is his duty, and only with the Abyssal Tears can he make them accessible."
+
+
+	set book author of {_book} to "Hyphonical"
+	set book title of {_book} to "&dGuide"
+	open book {_book} to {_p}
+
+on rightclick with written book:
+	player's tool's name is {@BookName}
+	cancel event
+	book(player)
+
+command /guide [<player>]:
+	aliases: /journalbook, /journalgui, /guidebook
+	trigger:
+		book(player)

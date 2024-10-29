@@ -1,0 +1,3 @@
+on right click on birch plank:
+	block 3 below event-block is a block of emerald
+	book(player)

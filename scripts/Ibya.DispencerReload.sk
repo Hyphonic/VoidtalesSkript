@@ -1,0 +1,6 @@
+on dispense of arrow:
+	add 1 arrow to event-block
+
+on player pickup arrow:
+	player is not op
+	cancel event

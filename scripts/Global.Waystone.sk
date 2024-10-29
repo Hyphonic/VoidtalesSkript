@@ -1,0 +1,505 @@
+# (!) Requires Skript, SkBee, SkJson, Skript-Particle and Skript-Gui(-Nightly) Kindly use the latest version of all (!)
+
+options:
+	Prefix: "<gradient:#439cfb:#f187fb>Waystone</gradient>"
+	SettingsPrefix: "<gradient:#439cfb:#f187fb>Settings</gradient>"
+	EffectsPrefix: "<gradient:#439cfb:#f187fb>Effects</gradient>"
+	CreditsPrefix: "<gradient:#439cfb:#f187fb>Credits</gradient>"
+	ExcluderPrefix: "<gradient:#439cfb:#f187fb>Excluder</gradient>"
+	GuiRows: 2 # May break if you change this, haven't tested yet
+	DefaultVolume: 0.3
+	DefaultEffect: "block.portal.trigger"
+
+on script load:
+	set {-json} to json from file "plugins/Skript/waypoints.yml"
+	#map {-json} to {-json::*}
+	#send {-json} with pretty print to all players
+	delete {-Names::*}
+	delete {-X::*}
+	delete {-Y::*}
+	delete {-Z::*}
+	delete {-World::*}
+	delete {-Desc::*}
+	delete {-Icon::*}
+	delete {-Locations::*}
+	delete {-Displayname::*}
+
+	loop values "waypoints" of {-json}:
+		add value "name" of json-value to {-Names::*}
+		add value "x" of json-value to {-X::*}
+		add value "y" of json-value to {-Y::*}
+		add value "z" of json-value to {-Z::*}
+		add value "world" of json-value to {-World::*}
+		add value "desc" of json-value to {-Desc::*}
+		add value "icon" of json-value to {-Icon::*}
+		add value "displayname" of json-value to {-Displayname::*}
+
+	loop size of {-X::*} times:
+		set {-Locations::%loop-value%} to location({-X::%loop-value%}, {-Y::%loop-value%}, {-Z::%loop-value%}, world {-World::%loop-value%})
+		#send {-Locations::%loop-value%} to all players
+
+	#loop size of {-Names::*} times:
+		#send "%{-Names::%loop-value%}%: %{-Desc::%loop-value%}%" to all players where [input's name contains "Hyphonical"]
+	#send "All yaml's loaded!" to all players where [player input is op]
+
+function Waystone(p: player, Page: number):
+	loop {ExcluderStatus::%{_p}'s uuid%::*}:
+		add 1 to {_Enabled} if loop-value = true
+
+	CheckExcluder({_p}) # Make sure all the locations are visible
+
+	if {_Enabled} is not set:
+		loop (size of {-Names::*}) times:
+			set {ExcluderStatus::%{_p}'s uuid%::%loop-value%} to true
+
+	create a gui with virtual chest inventory with 3 rows named mini message from " %{@Prefix}%": # Add Spacing to the title to make sure it fits
+		set the lock status of the edited gui to true
+
+		loop size of {-Names::*} times:
+			{Visited::%{_p}'s uuid%::Locations::*} contains {-Names::%loop-value%}
+			#send {-Names::%loop-value%} and {ExcluderStatus::%{_p}'s uuid%::%indices of {-Names::*} where [{-Names::%input%} contains {-Names::%loop-value%}]%} to {_p}
+			#send indices of {-Names::*} where [{-Names::%input%} contains {-Names::%loop-value%}] to {_p}
+			add {-Names::%loop-value%} to {_List::*} if {ExcluderStatus::%{_p}'s uuid%::%indices of {-Names::*} where [{-Names::%input%} contains {-Names::%loop-value%}]%} is true
+
+		#send {_List::*} to {_p}
+
+		if {_Page} > ceil(size of {-Names::*}/9):
+			send mini message from "<gradient:#439cfb:#f187fb>VoidTales</gradient> <gray>Waystone</gray> - <red>That page doesn't exist!</red>" to {_p}
+			if size of {_List::*} >= 1:
+				Waystone({_p}, 1)
+			exit
+
+		make gui slot (all integers between 0 and 8) with glass pane named " "
+		make gui slot (all integers between 18 and 26) with glass pane named " "
+		if {_Page} >= 2:
+			make gui slot 3 with paper named mini message from "<gradient:#fbd07c:#f7f779>Previous Page</gradient>":
+				play sound "item.bundle.remove_one" with volume {Volume::%{_p}'s uuid%} to {_p}
+				Waystone({_p}, {_Page} -1)
+		make gui slot 22 with player head named mini message from "<gradient:#fbd07c:#f7f779>Close" with lore mini message from "<color:#9fccfa>Click here</color> <white>to exit!</white>" with nbt from "{SkullOwner:{Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmI3MmFkODM2OWViNmNkODk5MGNlYzFmNTRkMTc3ODQ0MmExMDhiMDE4NjYyMmM1OTE4ZWI4NTE1OWUyZmI5ZSJ9fX0=""}]}}}":
+			close player's inventory
+		if {_Page} < ceil(size of {-Names::*}/9):
+			make gui slot 5 with paper named mini message from "<gradient:#fbd07c:#f7f779>Next Page</gradient>":
+				play sound "item.bundle.remove_one" with volume {Volume::%{_p}'s uuid%} to {_p}
+				Waystone({_p}, {_Page} +1)
+
+		set {_Profile} to {_Page} of ({_p}'s head) named mini message from "<gradient:#fbd07c:#f7f779>My Profile"
+		set line 1 of lore of {_Profile} to mini message from "<gray>+---- <color:#9fccfa>%{_p}'s name%'s Profile</color> ----+"
+
+		set line 2 of lore of {_Profile} to mini message from "<white><gray>></gray> You have unlocked <color:#9fccfa>%size of {_List::*}%</color> out of <color:#9fccfa>%size of {-Names::*}%</color> locations!</white>"
+		set line 3 of lore of {_Profile} to mini message from "<white><gray>></gray> Youre most visited location is <color:#9fccfa>%{MostVisited.%{_p}'s uuid%.Name}%</color> with <color:#9fccfa>%{MostVisited.%{_p}'s uuid%.Counter}%</color> visit(s)!</white>"
+		set line 4 of lore of {_Profile} to mini message from "<white><gray>></gray> You have teleported a total of <color:#9fccfa>%{Teleported.%{_p}'s uuid%}%</color> times!</white>"
+
+		set line 5 of lore of {_Profile} to mini message from "<gray>+---------------------------------+"
+		set line 7 of lore of {_Profile} to mini message from "<white><gray>!</gray> Click here to edit your <color:#9fccfa>Settings</color></white>"
+
+		make gui slot 4 with {_Profile}:
+			play sound "item.bundle.remove_one" with volume {Volume::%{_p}'s uuid%} to {_p}
+			#close player's inventory
+			Settings({_p}, {_Page})
+
+		#set {_Amount} to 9 if size of {-Names::*} >= 9 else size of {-Names::*}
+
+		loop 9 times:
+			{-Names::%loop-value - 9 + {_Page} * 9%} is set
+			#send "Slot %loop-value - 1%: Location %{-Names::%loop-value - 9 + {_Page} * 9%}%" to {_p} #                                <---- Debug
+
+			#send "Check if %{-Names::%loop-value - 9 + {_Page} * 9%}% Contains %{_List::*}%" to {_p}
+			if {_List::*} contains {-Names::%loop-value - 9 + {_Page} * 9%}:
+				if {-Names::%loop-value - 9 + {_Page} * 9%} contains {-CurrentLocation.%{_p}'s uuid%}:
+					set {_Item} to player head named mini message from "<white>> <gradient:#fbd07c:#f7f779>%{-Displayname::%loop-value - 9 + {_Page} * 9%}%</gradient>" with nbt from "{SkullOwner:{Properties:{textures:[{Value:""%{-Icon::%loop-value - 9 + {_Page} * 9%}%""}]}}}"
+
+					set line 1 of lore of {_Item} to mini message from "<white>You are currently at this location!</white>"
+
+				else:
+					set {_Item} to player head named mini message from "<gradient:#fbd07c:#f7f779>%{-Displayname::%loop-value - 9 + {_Page} * 9%}%</gradient>" with nbt from "{SkullOwner:{Properties:{textures:[{Value:""%{-Icon::%loop-value - 9 + {_Page} * 9%}%""}]}}}"
+
+					set line 1 of lore of {_Item} to mini message from "<white>%{-Desc::%loop-value - 9 + {_Page} * 9%}%</white>"
+			else:
+				set {_Item} to player head named mini message from "<gradient:#fbd07c:#f7f779>Unknown Location</gradient>" with nbt from "{SkullOwner:{Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTAzNWM1MjgwMzZiMzg0YzUzYzljOGExYTEyNTY4NWUxNmJmYjM2OWMxOTdjYzlmMDNkZmEzYjgzNWIxYWE1NSJ9fX0=""}]}}}"
+
+				set line 1 of lore of {_Item} to mini message from "<white>You haven't unlocked this location yet!"
+				set line 3 of lore of {_Item} to mini message from "<white>You can unlock this location by visiting its waystone beacon"
+
+			make gui slot loop-value + 8 with {_Item}:
+				uncolored item's name does not contain {-CurrentLocation.%{_p}'s uuid%}
+				#send {-CurrentLocation.%{_p}'s uuid%} to {_p}
+				uncolored item's name does not contain "Unknown Location" or ">"
+				close player's inventory
+				send mini message from "<gradient:#439cfb:#f187fb>VoidTales</gradient> <gray>Waystone</gray> - Teleporting to %raw item's name%!" to {_p}
+
+				#send uncolored item's name to {_p}
+				#send {Visited::%{_p}'s uuid%::Coordinates::%indices of {Visited::%{_p}'s uuid%::Locations::*} where [{Visited::%{_p}'s uuid%::Locations::%input%} contains uncolored item's name]%} to {_p}
+				
+				set {-Now::%{_p}'s uuid%} to now
+				send action bar mini message from "Teleporting you to <gradient:#439cfb:#f187fb>%item's name%</gradient>!" to player
+				Teleport({-Locations::%indices of {-Names::*} where [{-Names::%input%} contains uncolored item's name]%}, {_p}, uncolored item's name)
+				play sound {Effect::%{_p}'s uuid%} with volume {Volume::%{_p}'s uuid%} to {_p}
+
+		wait 1 tick
+		open last gui to {_p}
+
+function Counter(p: player, l: objects):
+	sort {_l::*} based on {Count::%{_p}'s uuid%::%input%}
+	#send {_l::*} to {_p}
+
+	#send "Looping List:" to {_p}
+	loop size of {_l::*} times:
+		#send "> %{_l::%loop-value%}%: %{Count::%{_p}'s uuid%::%{_l::%loop-value%}%}%" to {_p}
+
+		{MostVisited.%{_p}'s uuid%.Counter} < {Count::%{_p}'s uuid%::%{_l::%loop-value%}%}
+
+		set {MostVisited.%{_p}'s uuid%.Name} to {_l::%loop-value%}
+		set {MostVisited.%{_p}'s uuid%.Counter} to {Count::%{_p}'s uuid%::%{_l::%loop-value%}%}
+
+	#send "%{MostVisited.%{_p}'s uuid%.Name}%: %{MostVisited.%{_p}'s uuid%.Counter}%" to {_p}
+
+function Teleport(l: location, p: player, n: string):
+	set {_Shape} to circle with radius 2
+	set {_Shape}'s particle to end_rod
+
+	loop 20 times:
+		DrawShape({_Shape} and {_p}'s eyes)
+
+	add {_n} to {VisitCounter::%{_p}'s uuid%::*} if {VisitCounter::%{_p}'s uuid%::*} does not contain {_n}
+	add 1 to {Count::%{_p}'s uuid%::%{_n}%}
+	add 1 to {Teleported.%{_p}'s uuid%}
+
+	#send {_p}'s location to {_p}
+
+	#send {_l} to {_p}
+
+	Counter({_p}, {VisitCounter::%{_p}'s uuid%::*})
+
+	wait 40 ticks# if {_p} is not op
+	teleport {_p} to middle of {_l}
+
+function DrawShape(s: object, l: location):
+	rotate shape {_s} around x axis by random number between -75 and 75
+	rotate shape {_s} around y axis by random number between -75 and 75
+	rotate shape {_s} around z axis by random number between -75 and 75
+	draw an animation of the shape {_s} at {_l} over 2 seconds
+
+function Excluder(p: player, lp: number, Page: number):
+	#{Locations.Enabled::%{_p}'s uuid%}
+	create a gui with virtual chest inventory with 3 rows named mini message from " %{@ExcluderPrefix}%": # Add Spacing to the title to make sure it fits
+		set the lock status of the edited gui to true
+		make gui slot (all integers between 0 and 8) with glass pane named " "
+		make gui slot (all integers between 18 and 26) with glass pane named " "
+
+		loop size of {-Names::*} times:
+			#send loop-value to {_p}
+			{Visited::%{_p}'s uuid%::Locations::*} contains {-Names::%loop-value%}
+			add {-Names::%loop-value%} to {_List::*}
+
+		if {_Page} >= 2:
+			make gui slot 3 with paper named mini message from "<gradient:#fbd07c:#f7f779>Previous Page</gradient>":
+				play sound "item.bundle.remove_one" with volume {Volume::%{_p}'s uuid%} to {_p}
+				Excluder({_p}, {_lp}, {_Page} -1)
+
+		make gui slot 4 with {_Page} of ({_p}'s head) named mini message from "<gradient:#fbd07c:#f7f779>Page</gradient>: %{_Page}%" with lore mini message from "<red>Click here to return!</red>":
+			{ExcluderStatus::%{_p}'s uuid%::*} contains true # Make sure player has atleast one location enabled, otherwise the Waystone function returns an error for no locations present
+			Settings({_p}, {_lp})
+
+		if {_Page} < ceil(size of {_List::*}/9):
+			make gui slot 5 with paper named mini message from "<gradient:#fbd07c:#f7f779>Next Page</gradient>":
+				play sound "item.bundle.remove_one" with volume {Volume::%{_p}'s uuid%} to {_p}
+				Excluder({_p}, {_lp}, {_Page} + 1)
+
+		make gui slot 8 with player head named mini message from "<gradient:#f68080:#f1515e>Reset All" with lore mini message from "<white>Set all locations to true!" with nbt from "{SkullOwner:{Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZmY0MDRjMWI3M2E3Y2JmYzg2MDU3OGNlMDQ0ZTI3MWQxM2I3OTE2NmVhZDgwYjM2NDUxOGNmZjIzNGQ2MTIxMiJ9fX0=""}]}}}":
+			delete {ExcluderStatus::%{_p}'s uuid%::*}
+			loop (size of {-Names::*}) times:
+				set {ExcluderStatus::%{_p}'s uuid%::%loop-value%} to true
+			Excluder({_p}, {_lp}, {_Page})
+
+		#set {_Amount} to 9 if size of {-Names::*} >= 9 else size of {-Names::*}
+
+		loop 9 times:
+			{_List::%loop-value - 9 + {_Page} * 9%} is set
+			#send "Slot %loop-value -1%: Location %{_List::%loop-value - 9 + {_Page} * 9%}%" to {_p}
+			set {_Place} to "%indices of {-Names::*} where [{-Names::%input%} contains {_List::%loop-value - 9 + {_Page} * 9%}]%"
+
+			if {_List::%loop-value - 9 + {_Page} * 9%} contains {-CurrentLocation.%{_p}'s uuid%}:
+				set {_Item} to player head named mini message from "<white>> <gradient:#fbd07c:#f7f779>%{-Displayname::%loop-value - 9 + {_Page} * 9%}%</gradient>" with nbt from "{SkullOwner:{Properties:{textures:[{Value:""%{-Icon::%{_Place}%}%""}]}}}"
+
+				set line 1 of lore of {_Item} to mini message from "<white>You are currently at this location!</white>"
+
+			else:
+				set {_Item} to player head named mini message from "<gradient:#fbd07c:#f7f779>%{-Displayname::%loop-value - 9 + {_Page} * 9%}%</gradient>" with nbt from "{SkullOwner:{Properties:{textures:[{Value:""%{-Icon::%{_Place}%}%""}]}}}"
+
+				set line 1 of lore of {_Item} to mini message from "<white>%{-Desc::%loop-value - 9 + {_Page} * 9%}%</white>"
+
+			make gui slot loop-value + 8 with {_Item}
+
+		loop 9 times:
+			gui's slot loop-value + 8 is not air
+			set {_Slot} to "%indices of {-Names::*} where [{-Names::%input%} contains {_List::%loop-value - 9 + {_Page} * 9%}]%"
+
+			#send {ExcluderStatus::%{_p}'s uuid%::%{_Slot}%} to {_p}
+
+			if {ExcluderStatus::%{_p}'s uuid%::%{_Slot}%} is true:
+				set {_SkullNBT} to "{SkullOwner:{Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNWZmMzE0MzFkNjQ1ODdmZjZlZjk4YzA2NzU4MTA2ODFmOGMxM2JmOTZmNTFkOWNiMDdlZDc4NTJiMmZmZDEifX19""}]}}}"
+				set {_Status} to "<gradient:#f68080:#f1515e>Disable</gradient>"			
+		
+			else:
+				set {_SkullNBT} to "{SkullOwner:{Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGU0YjhiOGQyMzYyYzg2NGUwNjIzMDE0ODdkOTRkMzI3MmE2YjU3MGFmYmY4MGMyYzViMTQ4Yzk1NDU3OWQ0NiJ9fX0=""}]}}}"
+				set {_Status} to "<gradient:#82f4b1:#30c67c>Enable</gradient>"
+
+			set {_Item} to player head named mini message from "<white>Click here to</white> %{_Status}% <white>%{_List::%loop-value - 9 + {_Page} * 9%}%</white>" with nbt from {_SkullNBT}
+			
+			make gui slot loop-value + 17 with {_Item}:
+				#send "Slot info: %{_List::%gui slot - 17 - 9 + {_Page} * 9%}% With Slot Number: %indices of {-Names::*} where [{-Names::%input%} contains {_List::%gui slot - 17 - 9 + {_Page} * 9%}]%" to player
+				set {_Slot} to "%indices of {-Names::*} where [{-Names::%input%} contains {_List::%gui slot - 17 - 9 + {_Page} * 9%}]%"
+				#send {_Slot} to {_p}
+				set {ExcluderStatus::%{_p}'s uuid%::%{_Slot}%} to true if {ExcluderStatus::%{_p}'s uuid%::%{_Slot}%} is false else false
+				#send {ExcluderStatus::%{_p}'s uuid%::%{_Slot}%} to {_p}
+				Excluder({_p}, {_lp} , {_Page})
+
+		open last gui to {_p}
+
+function Credits(p: player, lp: number):
+	create a gui with virtual dropper named mini message from " %{@CreditsPrefix}%": # Add Spacing to the title to make sure it fits
+		set the lock status of the edited gui to true
+		make gui slot (all integers between 0 and 9) with glass pane named " "
+
+		if {Credits::%{_p}'s uuid%} is not set:
+			send mini message from "Thank you for opening the <gradient:#fbd07c:#f7f779>Credits</gradient> screen! I hope you like my plugin :D" to {_p}
+			set {Credits::%{_p}'s uuid%} to true
+		
+		make gui slot 3 with skull of "SnowlyTheShogun" parsed as offline player named mini message from "<gradient:#439cfb:#f187fb>SnowlyTheShoGun</gradient>" with lore mini message from "<white>Owner</white>"
+
+		make gui slot 1 with {_p}'s head named mini message from "<red>Return</red>":
+			play sound "item.bundle.remove_one" with volume {Volume::%{_p}'s uuid%} to {_p}
+			Settings({_p}, {_lp})
+
+		make gui slot 5 with skull of "Hyphonical" parsed as offline player named mini message from "<gradient:#439cfb:#f187fb>Hyphonical</gradient>" with lore mini message from "<white>Admin / Developer</white>"
+
+		open last gui to {_p}
+
+function Effects(p: player, lp: number):
+	create a gui with virtual dropper named mini message from {@EffectsPrefix}:
+		set the lock status of the edited gui to true
+		make gui slot (all integers between 0 and 9) with glass pane named " "
+		
+		make gui slot 3 with player head named mini message from "<gradient:#919bff:#133a94>Sonic Charge</gradient>" with nbt from "{SkullOwner:{Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvY2Y2NDgxYzdjNDM1YzM0ZjIxZGZmMTA0M2E0YzcwMzRjNDQ1YTM4M2E1NDM1ZmExZjJhNTAzYTM0OGFmZDYyZiJ9fX0=""}]}}}":
+			stop all sounds for {_p}
+			play sound "entity.warden.sonic_charge" with volume {Volume::%{_p}'s uuid%} to player
+			set {Effect::%{_p}'s uuid%} to "entity.warden.sonic_charge"
+			set {Effect::Icon::%{_p}'s uuid%} to nbt of item
+
+		make gui slot 4 with player head named mini message from "<gradient:#6eee87:#5fc52e>Creeper Hiss</gradient>" with nbt from "{SkullOwner:{Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjAzMTYwN2YyNGU2M2Y0NTEwMzAyODNiZmQxYjhmOTlkNTJmMThmNDc3OGNkNmM5NWZlMzAzYzZjYTIxZGNiMiJ9fX0=""}]}}}":
+			stop all sounds for {_p}
+			play sound "entity.creeper.primed" with volume {Volume::%{_p}'s uuid%} to player
+			set {Effect::%{_p}'s uuid%} to "entity.creeper.primed"
+			set {Effect::Icon::%{_p}'s uuid%} to nbt of item
+
+		make gui slot 5 with player head named mini message from "<gradient:#c7b3cc:#268ab2>Nether Portal</gradient>" with nbt from "{SkullOwner:{Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjBiZmMyNTc3ZjZlMjZjNmM2ZjczNjVjMmM0MDc2YmNjZWU2NTMxMjQ5ODkzODJjZTkzYmNhNGZjOWUzOWIifX19""}]}}}":
+			stop all sounds for {_p}
+			play sound "block.portal.trigger" with volume {Volume::%{_p}'s uuid%} to player
+			set {Effect::%{_p}'s uuid%} to "block.portal.trigger"
+			set {Effect::Icon::%{_p}'s uuid%} to nbt of item
+
+		make gui slot 1 with {_p}'s head named mini message from "<red>Return</red>":
+			play sound "item.bundle.remove_one" with volume {Volume::%{_p}'s uuid%} to {_p}
+			#close player's inventory
+			Settings({_p}, {_lp})
+
+		open last gui to {_p}
+
+function SecretSettings(p: player, lp: number):
+	create a gui with virtual dropper named mini message from {@SettingsPrefix}:
+		set the lock status of the edited gui to true
+		make gui slot (all integers between 0 and 26) with glass pane named " "
+
+		make gui slot 1 with {_p}'s head named mini message from "<red>Return</red>":
+			play sound "item.bundle.remove_one" with volume {Volume::%{_p}'s uuid%} to {_p}
+			#close player's inventory
+			Settings({_p}, {_lp})
+
+		make gui slot 3 with player head named mini message from "<gradient:#fbd07c:#f7f779>Get All Locations</gradient>" with nbt from "{SkullOwner:{Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvN2FiNTI3ZDE5Nzg1MTE3YzZhN2I2NjU1M2M2ZjBlMjg3MzU3NjNhM2JlNDExM2ZjYmNhNmM0N2UzNmI0NzViMCJ9fX0=""}]}}}":
+			delete {Visited::%{_p}'s uuid%::Locations::*}
+			delete {Visited::%{_p}'s uuid%::Coordinates::*}
+			set {Visited::%{_p}'s uuid%::Locations::*} to {-Names::*}
+			set {Visited::%{_p}'s uuid%::Coordinates::*} to {-Locations::*}
+
+		make gui slot 5 with player head named mini message from "<gradient:#fbd07c:#f7f779>Reset all Locations</gradient>" with nbt from "{SkullOwner:{Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDc2MWVhNzE5MTMxMzdlYjk4NmVkODYxZDFhOWRhMWM3MDAyMmFiNWFjZDU3Yjg4NDk5YWI4MGNjNGUwYmQyNCJ9fX0=""}]}}}":
+			delete {Visited::%{_p}'s uuid%::Locations::*}
+			delete {Visited::%{_p}'s uuid%::Coordinates::*}
+			add {-Locations::%indices of {-Names::*} where [{-Names::%input%} contains "Soul Station"]%} to {Visited::%{_p}'s uuid%::Coordinates::*}
+			add "Soul Station" to {Visited::%{_p}'s uuid%::Locations::*}
+
+
+		open last gui to {_p}
+
+function Settings(p: player, lp: number):
+	create a gui with virtual dropper named mini message from {@SettingsPrefix}:
+		set the lock status of the edited gui to true
+		make gui slot (all integers between 0 and 26) with glass pane named " "
+
+		loop size of {-Names::*} times:
+			{Visited::%{_p}'s uuid%::Locations::*} contains {-Names::%loop-value%}
+			#send {-Names::%loop-value%} and {ExcluderStatus::%{_p}'s uuid%::%indices of {-Names::*} where [{-Names::%input%} contains {-Names::%loop-value%}]%} to {_p}
+			#send indices of {-Names::*} where [{-Names::%input%} contains {-Names::%loop-value%}] to {_p}
+			add {-Names::%loop-value%} to {_List::*} if {ExcluderStatus::%{_p}'s uuid%::%indices of {-Names::*} where [{-Names::%input%} contains {-Names::%loop-value%}]%} is true
+
+		make gui slot 0 with player head named mini message from "<gradient:#82f4b1:#30c67c>Increase Volume</gradient>" with lore mini message from "<white>Set your own volume for every effect!</white><br><white>Current Volume: <color:#9fccfa>%abs({Volume::%{_p}'s uuid%})%</white>" with nbt from "{SkullOwner:{Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMzIxM2MxYTQyMGQxMWEwNmE3NGMzZGI5OGIyMTMzMmI3NDkzYThjNTYyMmQ1NTgwMDMxODY4ODJhMWI5OWY1NiJ9fX0=""}]}}}":
+			{Volume::%{_p}'s uuid%} is between 0.00 and 1.95
+			increase {Volume::%{_p}'s uuid%} by 0.05
+			play sound "item.bundle.remove_one" with volume {Volume::%{_p}'s uuid%} to {_p}
+			Settings({_p}, {_lp})
+			exit
+	
+		if {_p} is op:
+			make gui slot 2 with player head named mini message from "<gradient:#fbd07c:#f7f779>Super Secret Settings</gradient>" with lore mini message from "<white>Secret settings that are only accessible when you are an operator" with nbt from "{SkullOwner:{Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDJmMjc1MmNkZjhiYjY2NWEzZWNhYjA3YzEyNjFhOGU1OTRkYTc5MTdiY2FmNTYyNjc0N2EwOTcyMTk2MDk5MyJ9fX0=""}]}}}":
+				play sound "item.bundle.remove_one" with volume {Volume::%{_p}'s uuid%} to {_p}
+				SecretSettings({_p}, {_lp})
+
+		make gui slot 6 with player head named mini message from "<gradient:#f68080:#f1515e>Decrease Volume</gradient>" with lore mini message from "<white>Set your own volume for every effect!</white><br><white>Current Volume: <color:#9fccfa>%abs({Volume::%{_p}'s uuid%})%</white>" with nbt from "{SkullOwner:{Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTBkNGFlYjI2YWExNzM0NWY5YmRhYjFmMTk5YzI3ZGFmNmVmYjFmZDcxNTQ2ZjIzZDM1MjI5ZjYxMmYzNzMyOCJ9fX0=""}]}}}":
+			{Volume::%{_p}'s uuid%} is between 0.05 and 2.00
+			decrease {Volume::%{_p}'s uuid%} by 0.05
+			play sound "item.bundle.remove_one" with volume {Volume::%{_p}'s uuid%} to {_p}
+			Settings({_p}, {_lp})
+			exit
+
+		make gui slot 3 with player head with nbt from {Effect::Icon::%{_p}'s uuid%} named mini message from "<gradient:#fbd07c:#f7f779>Choose Teleport Effect</gradient>" with lore mini message from "<white>Choose what effect triggers when you select your destination!</white><br><white>Current Effect: <color:#9fccfa>%{Effect::%{_p}'s uuid%}%</color>":
+			play sound "item.bundle.remove_one" with volume {Volume::%{_p}'s uuid%} to {_p}
+			Effects({_p}, {_lp})
+
+		loop {ExcluderStatus::%{_p}'s uuid%::*}:
+			add 1 to {_Enabled} if loop-value = true
+		make gui slot 5 with player head named mini message from "<gradient:#fbd07c:#f7f779>Exclude Locations</gradient>" with lore mini message from "<white>Only show the locations you want!</white><br><white>Currently enabled locations: <color:#9fccfa>%{_Enabled}%</color>/<color:#9fccfa>%size of {-Names::*}%</color>" with nbt from "{SkullOwner:{Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjU0ODUwMzFiMzdmMGQ4YTRmM2I3ODE2ZWI3MTdmMDNkZTg5YTg3ZjZhNDA2MDJhZWY1MjIyMWNkZmFmNzQ4OCJ9fX0=""}]}}}":
+			play sound "item.bundle.remove_one" with volume {Volume::%{_p}'s uuid%} to {_p}
+			Excluder({_p}, {_lp}, 1)
+
+		make gui slot 8 with player head named mini message from "<gradient:#fbd07c:#f7f779>Credits</gradient>" with nbt from "{SkullOwner:{Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDAxYWZlOTczYzU0ODJmZGM3MWU2YWExMDY5ODgzM2M3OWM0MzdmMjEzMDhlYTlhMWEwOTU3NDZlYzI3NGEwZiJ9fX0=""}]}}}":
+			play sound "item.bundle.remove_one" with volume {Volume::%{_p}'s uuid%} to {_p}
+			Credits({_p}, {_lp})
+
+		make gui slot 1 with {_p}'s head named mini message from "<gradient:#fbd07c:#f7f779>Return</gradient>":
+			play sound "item.bundle.remove_one" with volume {Volume::%{_p}'s uuid%} to {_p}
+			#close player's inventory
+			Waystone({_p}, {_lp})
+
+		open last gui to {_p}
+
+function CheckLoc(p: player, b: block):
+	if {Volume::%{_p}'s uuid%} is not set:
+		set {Volume::%{_p}'s uuid%} to {@DefaultVolume}
+	if {Effect::%{_p}'s uuid%} is not set:
+		set {Effect::%{_p}'s uuid%} to {@DefaultEffect}
+
+	#{_p} is op
+	block below {_b} is beacon
+	#send "X: %floor({_b}'s x-coordinate)% Y: %floor({_b}'s y-coordinate)% Z: %floor({_b}'s z-coordinate)%" to {_p}
+	loop {-Locations::*}:
+		#send "Looping %loop-value%" to {_p}
+
+		distance between loop-value's location and {_b}'s location is smaller than 5
+
+		set {_FoundLocation} to true
+
+		#loop-value's x-coordinate is floor({_b}'s x-coordinate) or ceil({_b}'s x-coordinate)
+
+		#loop-value's z-coordinate is floor({_b}'s z-coordinate) or ceil({_b}'s z-coordinate)
+
+		set {-CurrentLocation.%{_p}'s uuid%} to {-Names::%indices of {-Locations::*} where [{-Locations::%input%} contains loop-value]%}
+		
+		#send "%now% %{-CurrentLocation.%{_p}'s uuid%}%" to {_p}
+
+		if {Visited::%{_p}'s uuid%::Locations::*} does not contain {-Names::%indices of {-Locations::*} where [{-Locations::%input%} contains loop-value]%}:
+			add loop-value to {Visited::%{_p}'s uuid%::Coordinates::*}
+			add {-Names::%indices of {-Locations::*} where [{-Locations::%input%} contains loop-value]%} to {Visited::%{_p}'s uuid%::Locations::*}
+			send mini message from "<gradient:#439cfb:#f187fb>VoidTales</gradient> <gray>Waystone</gray> - You discovered a new waystone!" to {_p}
+
+	#send {-CurrentLocation.%{_p}'s uuid%} to {_p} # Use this to send the location the player is currently at to make sure the player cant teleport to his own location (would be stupid right?)
+	{_FoundLocation} is true
+	teleport {_p} to middle of block 1 block above {_b}'s location
+	play sound "block.piston.extend" with volume {Volume::%{_p}'s uuid%} with pitch 1.5 to {_p}
+	Waystone({_p}, 1)
+
+
+on first join:
+	delete {ExcluderStatus::%player's uuid%::*}
+
+	loop (size of {-Names::*}) times:
+		set {ExcluderStatus::%player's uuid%::%loop-value%} to false
+
+	delete {Visited::%player's uuid%::Locations::*}
+	delete {Visited::%player's uuid%::Coordinates::*}
+	add {-Locations::%indices of {-Names::*} where [{-Names::%input%} contains "Soul Station"]%} to {Visited::%player's uuid%::Coordinates::*}
+	add "Soul Station" to {Visited::%player's uuid%::Locations::*}
+
+#on player teleport:
+#	#send difference between now and {-Now::%event-player's uuid%} to player
+#	if {-Now::%player's uuid%} is not set:
+#		CheckLoc(event-player, event-block)
+#
+#	if difference between now and {-Now::%event-player's uuid%} is bigger than 3 seconds:
+#		#send "Teleported!" to player
+#		#wait 1 tick
+#		CheckLoc(event-player, event-block)
+
+command /resetws:
+	permission: op
+	trigger:
+		delete {ExcluderStatus::%player's uuid%::*}
+
+		loop (size of {-Names::*}) times:
+			set {ExcluderStatus::%player's uuid%::%loop-value%} to false
+
+		delete {Visited::%player's uuid%::Locations::*}
+		delete {Visited::%player's uuid%::Coordinates::*}
+		add {-Locations::%indices of {-Names::*} where [{-Names::%input%} contains "Soul Station"]%} to {Visited::%player's uuid%::Coordinates::*}
+		add "Soul Station" to {Visited::%player's uuid%::Locations::*}
+		delete {VisitCounter::%player's uuid%::*}
+		delete {Count::%player's uuid%::*}
+		set {MostVisited.%player's uuid%.Counter} to 0
+		set {Teleported.%player's uuid%} to 0
+
+command /dws:
+	permission: op
+	trigger:
+		send {Visited::%player's uuid%::Locations::*} to player
+
+		loop {Visited::%player's uuid%::Coordinates::*}:
+			send loop-value to player
+			#set {_regions::*} to regions at loop-value
+
+		send "Other:" to player
+		send {Visited::*} to player
+
+command /wslocation <player> <text>:
+	permission: op
+	aliases: /waystoneslocation, /waystonelocation
+	trigger:
+		{-Names::*} contains arg-2
+		if {Visited::%arg-1's uuid%::Locations::*} does not contain arg-2:
+			#add arg-2 to {Visited::%arg-1's uuid%::Locations::*}
+			add {-Locations::%indices of {-Names::*} where [{-Names::%input%} contains arg-2]%} to {Visited::%arg-1's uuid%::Coordinates::*}
+			add arg-2 to {Visited::%player's uuid%::Locations::*}
+		else:
+			send "%arg-1% Already has %arg-2%" to player
+
+function CheckExcluder(p: player):
+	loop size of {-Names::*} times:
+		#send "%{-Names::%loop-value%}%: %{ExcluderStatus::%{_p}'s uuid%::%indices of {-Names::*} where [{-Names::%input%} contains {-Names::%loop-value%}]%}%" to {_p}
+
+		{ExcluderStatus::%{_p}'s uuid%::%indices of {-Names::*} where [{-Names::%input%} contains {-Names::%loop-value%}]%} is not set
+		set {ExcluderStatus::%{_p}'s uuid%::%indices of {-Names::*} where [{-Names::%input%} contains {-Names::%loop-value%}]%} to true
+
+command /waystone [<player>] [<number>]:
+	permission: op
+	aliases: /waystones, /ws
+	trigger:
+		delete {-CurrentLocation.%(argument 1 if argument 1 is set else player)'s uuid%}
+		if {Volume::%(argument 1 if argument 1 is set else player)'s uuid%} is not set:
+			set {Volume::%(argument 1 if argument 1 is set else player)'s uuid%} to {@DefaultVolume}
+		if {Effect::%(argument 1 if argument 1 is set else player)'s uuid%} is not set:
+			set {Effect::%(argument 1 if argument 1 is set else player)'s uuid%} to {@DefaultEffect}
+
+		play sound "block.piston.extend" with volume {Volume::%{_p}'s uuid%} with pitch 1.5 to (argument 1 if argument 1 is set else player)
+		Waystone((argument 1 if argument 1 is set else player), (argument 2 if argument 2 is set else 1))
+
+on tab complete of "/waystone", "/waystones" and "/ws":
+	set {_List::*} to {-Names}
+	set tab completions for position 1 to all players
+	set tab completions for position 2 to all integers between 1 and ceil(size of {-Names::*}/9)

@@ -1,0 +1,15 @@
+on walk on purple stained glass:
+	block below event-block is beacon
+	#wait 2 ticks
+	if {-Now::%player's uuid%} is not set:
+		CheckLoc(event-player, event-block)
+
+	if difference between now and {-Now::%event-player's uuid%} is bigger than 2 seconds:
+		#send "Teleported!" to player
+		#wait 1 tick
+		CheckLoc(event-player, event-block)
+
+	else:
+		send mini message from "<gradient:#439cfb:#f187fb>VoidTales</gradient> <gray>Waystone</gray> - Please wait a few seconds before using Waystone again" to player
+
+	#Waystone(player, 1)

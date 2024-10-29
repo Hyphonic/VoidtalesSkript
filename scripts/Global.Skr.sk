@@ -1,0 +1,8 @@
+command /skr <text>:
+	description: Reload a script
+	permission: op
+	trigger:
+		make player execute "skript reload %arg-1%"
+
+on tab complete of "/skr":
+	set tab completions for position 1 to all enabled scripts

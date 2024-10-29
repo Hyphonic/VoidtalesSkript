@@ -1,0 +1,4 @@
+on right click on any redstone lamp:
+	player is op
+	player is sneaking
+	set event-block to lit redstone lamp

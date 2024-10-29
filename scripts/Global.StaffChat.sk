@@ -1,0 +1,19 @@
+command /staffchat [<text>]:
+	permission: op
+	aliases: /sc, /Sc, /SC, /sC
+	trigger:
+		if arg-1 is set:
+			send mini message from "<gradient:#439cfb:#f187fb>VoidTales</gradient> <gray>StaffChat</gray> - %arg-1%" to all players where [player input is op]
+			play sound "block.note_block.chime" with volume 0.5 to all players where [player input is op]
+
+# not really for staffchat
+command /spy:
+	permission: op
+	trigger:
+		make player execute command "/socialspy"
+
+#on command:
+#	{DefaultCommands::*} does not contain full command
+#	event-player is not op
+#	cancel event
+#	send mini message from "<gradient:#439cfb:#f187fb>VoidTales</gradient> <gray>Server</gray> - You cannot execute that command here!" to event-player

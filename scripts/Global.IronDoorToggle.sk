@@ -1,0 +1,4 @@
+on right click on iron door:
+	player is sneaking
+	player is op
+	toggle event-block

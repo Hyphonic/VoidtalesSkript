@@ -1,0 +1,9 @@
+on leave:
+	set {Pack::%event-player's uuid%} to 0
+
+on resource pack request response:
+	if the resource pack was successfully loaded:
+		add 1 to {Pack::%event-player's uuid%}
+
+	if {Pack::%event-player's uuid%} >= 2:
+		send mini message from "<gradient:#439cfb:#f187fb>VoidTales</gradient> <gray>Resource Pack</gray> - %event-player% Successfully loaded the Resource Pack!" to all players where [input is op]

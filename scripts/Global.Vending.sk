@@ -1,0 +1,13 @@
+on right click on dark oak button:
+	block behind event-block is a blast furnace
+	redstone power of event-block is not 15
+	make console execute command "/dtl open %event-player% tm ibya forest"
+	play sound "block.vault.open_shutter" to player
+    
+    
+    
+on right click on dark oak button:
+	block behind event-block is a observer
+	redstone power of event-block is not 15
+	make console execute command "/dtl open %event-player% tm mark ii"
+	play sound "block.vault.open_shutter" to player

@@ -1,0 +1,40 @@
+command /sn [<text>]:
+	permission: op
+	trigger:
+		set name of player's tool to mini message from arg-1
+
+command /sl [<text>]:
+	permission: op
+	trigger:
+		set lore of player's tool to mini message from arg-1
+
+command /present <player>:
+	permission: op
+	trigger:
+		set {_Item} to player head with nbt from "{SkullOwner:{Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNmNlZjlhYTE0ZTg4NDc3M2VhYzEzNGE0ZWU4OTcyMDYzZjQ2NmRlNjc4MzYzY2Y3YjFhMjFhODViNyJ9fX0=""}]}}}"
+
+		set {_Item}'s name to mini message from "<gradient:#84ffc9:#aab2ff:#eca0ff>Hypho's Amazing Gift</gradient>"
+		set line 1 of {_Item}'s lore to mini message from "<white>Wrapped in vibrant ribbons and"
+		set line 2 of {_Item}'s lore to mini message from "<white>adorned with a gleaming bow,"
+		set line 3 of {_Item}'s lore to mini message from "<white>this special gift was crafted"
+		set line 4 of {_Item}'s lore to mini message from "<white>with heartfelt thanks."
+
+		set line 6 of {_Item}'s lore to mini message from "<white>A token of appreciation for the"
+		set line 7 of {_Item}'s lore to mini message from "<white>hero who ventured forth, mined,"
+		set line 8 of {_Item}'s lore to mini message from "<white>built, and braved every challenge."
+
+		set line 10 of {_Item}'s lore to mini message from "<white>Within lies a shimmering reward,"
+		set line 11 of {_Item}'s lore to mini message from "<white>a reminder that your efforts"
+		set line 12 of {_Item}'s lore to mini message from "<white>have not gone unnoticed."
+
+		set line 14 of {_Item}'s lore to mini message from "<white>Your journey, strength, and kindness"
+		set line 15 of {_Item}'s lore to mini message from "<white>are cherished, and this gift is"
+		set line 16 of {_Item}'s lore to mini message from "<white>proof that you are truly valued."
+
+		set line 18 of {_Item}'s lore to mini message from "<white>Open it to feel the warmth of"
+		set line 19 of {_Item}'s lore to mini message from "<white>gratitude from those whose lives"
+		set line 20 of {_Item}'s lore to mini message from "<white>you've brightened."
+
+		set line 22 of {_Item}'s lore to mini message from "<white>To the one who made a difference, <red>thank you"
+
+		give {_Item} to arg-1

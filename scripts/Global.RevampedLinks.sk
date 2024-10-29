@@ -1,0 +1,50 @@
+options:
+	DiscordUrl: "https://discord.gg/a526aRaMxh"
+	WebsiteUrl: "https://minecraft.sad.run"
+	StoreUrl: "https://minecraft.sad.run/store"
+	ForumUrl: "https://minecraft.sad.run/forum"
+	TwitchUrl: "https://www.twitch.tv/hzwdinventory"
+	SupportUrl: "https://minecraft.sad.run/contact"
+	YoutubeUrl: "https://www.youtube.com/channel/UCx4JsznwfnxpGc5G5uxAGkQ"
+
+command /discord [<text>]:
+	trigger:
+		send action bar mini message from "<gradient:#439cfb:#f187fb>Invoking Discord...</gradient>" to player
+		wait 1 tick
+		send "$<hover:show_text:'Connect with our community!'><click:open_url:%{@DiscordUrl}%>Click here to join our <gradient:#439cfb:#f187fb>Discord</gradient> server and chat with us!</click>" to player
+
+command /website:
+	trigger:
+		send action bar mini message from "<gradient:#8A2BE2:#FF6347>Exploring new realms...</gradient>" to player
+		wait 1 tick
+		send "$<hover:show_text:'Embark on your adventure!'><click:open_url:%{@WebsiteUrl}%>Visit our <gradient:#8A2BE2:#FF6347>Website</gradient> for the latest news and updates!</click>" to player
+
+command /store:
+	trigger:
+		send action bar mini message from "<gradient:#FFD700:#FF4500>Loading the store...</gradient>" to player
+		wait 1 tick
+		send "$<hover:show_text:'Check out exclusive items!'><click:open_url:%{@StoreUrl}%>Open our <gradient:#FFD700:#FF4500>Store</gradient> and gear up for your journey!</click>" to player
+
+command /forum:
+	trigger:
+		send action bar mini message from "<gradient:#00FF7F:#32CD32>Diving into discussions...</gradient>" to player
+		wait 1 tick
+		send "$<hover:show_text:'Join the conversation!'><click:open_url:%{@ForumUrl}%>Join our <gradient:#00FF7F:#32CD32>Forum</gradient> and share your thoughts!</click>" to player
+
+command /twitch:
+	trigger:
+		send action bar mini message from "<gradient:#9146FF:#FF0077>Tuning into Twitch...</gradient>" to player
+		wait 1 tick
+		send "$<hover:show_text:'Catch us live!'><click:open_url:%{@TwitchUrl}%>Watch us on <gradient:#9146FF:#FF0077>Twitch</gradient> and don't miss a moment!</click>" to player
+
+command /support:
+	trigger:
+		send action bar mini message from "<gradient:#00CED1:#4682B4>Summoning Support...</gradient>" to player
+		wait 1 tick
+		send "$<hover:show_text:'Need help?'><click:open_url:%{@SupportUrl}%>Contact <gradient:#00CED1:#4682B4>Support</gradient> for assistance and answers!</click>" to player
+
+command /youtube:
+	trigger:
+		send action bar mini message from "<gradient:#FF0000:#FF8C00>Connecting to YouTube...</gradient>" to player
+		wait 1 tick
+		send "$<hover:show_text:'Watch epic moments!'><click:open_url:%{@YoutubeUrl}%>Catch us on <gradient:#FF0000:#FF8C00>YouTube</gradient> for awesome content!</click>" to player

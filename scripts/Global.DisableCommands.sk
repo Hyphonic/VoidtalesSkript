@@ -1,0 +1,7 @@
+on script load:
+	set {DefaultCommands::*} to "journal", "guide", "rules", "help", "discord", "support", "forum", "youtube", "website", "store" and "twitch"
+
+on send command list:
+	event-player is not op
+	set command list to command list where [{DefaultCommands::*} contains input]
+	#remove all commands from command list

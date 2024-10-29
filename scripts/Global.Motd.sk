@@ -1,0 +1,6 @@
+on server ping:
+	set the motd to mini message from "    <bold><gradient:#439cfb:#f187fb>> VOIDTALES <</gradient></bold><br>      <color:#439cfb>[1.20.4 - 1.21]</color>"
+	set the version string to mini message from "<color:#6e40f7>Join Now!</color>"
+
+#on join:
+#	set server brand to mini message from "<light_purple>VoidTales<reset>" for player

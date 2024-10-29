@@ -1,0 +1,5 @@
+on chat:
+	loop all players:
+		message contains loop-player's name
+		replace (name of loop-player) in message with mini message from "<gradient:#82f4b1:#30c67c>%loop-player%<reset> "
+		play sound "entity.experience_orb.pickup" with volume 0.2 to loop-player

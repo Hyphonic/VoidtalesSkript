@@ -1,0 +1,15 @@
+command /nightvision [<boolean>]:
+	permission: op
+	aliases: /nv
+	trigger:
+		if arg-1 is set:
+			set {Vision::%player's uuid%} to arg-1
+		else:
+			set {Vision::%player's uuid%} to true if {Vision::%player's uuid%} is false else false
+
+		remove night vision from player if {Vision::%player's uuid%} is false
+		apply infinite night vision without any particles whilst hiding the potion icon to the player if {Vision::%player's uuid%} is true
+
+		set {_Message} to mini message from "<gradient:#439cfb:#f187fb>VoidTales</gradient> <gray>Essentials</gray> - Night Vision <gradient:#82f4b1:#30c67c>Enabled</gradient>" if  {Vision::%player's uuid%} is true		
+		set {_Message} to mini message from "<gradient:#439cfb:#f187fb>VoidTales</gradient> <gray>Essentials</gray> - Night Vision <gradient:#DE2525:#960606>Disabled</gradient>" if  {Vision::%player's uuid%} is false		
+		send {_Message} to player
