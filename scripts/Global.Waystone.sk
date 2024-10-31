@@ -123,7 +123,7 @@ function Waystone(p: player, Page: number):
 			make gui slot loop-value + 8 with {_Item}:
 				uncolored item's name does not contain {-CurrentLocation.%{_p}'s uuid%}
 				#send {-CurrentLocation.%{_p}'s uuid%} to {_p}
-				uncolored item's name does not contain "Unknown Location" or ">"
+				uncolored item's name does not contain "Unknown Location" or ">" # Triple check
 				close player's inventory
 				send mini message from "<gradient:#439cfb:#f187fb>VoidTales</gradient> <gray>Waystone</gray> - Teleporting to %raw item's name%!" to {_p}
 
@@ -198,6 +198,7 @@ function Excluder(p: player, lp: number, Page: number):
 
 		make gui slot 4 with {_Page} of ({_p}'s head) named mini message from "<gradient:#fbd07c:#f7f779>Page</gradient>: %{_Page}%" with lore mini message from "<red>Click here to return!</red>":
 			{ExcluderStatus::%{_p}'s uuid%::*} contains true # Make sure player has atleast one location enabled, otherwise the Waystone function returns an error for no locations present
+			play sound "item.bundle.remove_one" with volume {Volume::%{_p}'s uuid%} to {_p}
 			Settings({_p}, {_lp})
 
 		if {_Page} < ceil(size of {_List::*}/9):
@@ -209,6 +210,7 @@ function Excluder(p: player, lp: number, Page: number):
 			delete {ExcluderStatus::%{_p}'s uuid%::*}
 			loop (size of {-Names::*}) times:
 				set {ExcluderStatus::%{_p}'s uuid%::%loop-value%} to true
+			play sound "item.bundle.remove_one" with volume {Volume::%{_p}'s uuid%} to {_p}
 			Excluder({_p}, {_lp}, {_Page})
 
 		#set {_Amount} to 9 if size of {-Names::*} >= 9 else size of {-Names::*}
@@ -348,7 +350,7 @@ function Settings(p: player, lp: number):
 			Settings({_p}, {_lp})
 			exit
 	
-		if {_p} is op:
+		if {_p} is op: # :shushing_face:
 			make gui slot 2 with player head named mini message from "<gradient:#fbd07c:#f7f779>Super Secret Settings</gradient>" with lore mini message from "<white>Secret settings that are only accessible when you are an operator" with nbt from "{SkullOwner:{Properties:{textures:[{Value:""eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDJmMjc1MmNkZjhiYjY2NWEzZWNhYjA3YzEyNjFhOGU1OTRkYTc5MTdiY2FmNTYyNjc0N2EwOTcyMTk2MDk5MyJ9fX0=""}]}}}":
 				play sound "item.bundle.remove_one" with volume {Volume::%{_p}'s uuid%} to {_p}
 				SecretSettings({_p}, {_lp})
@@ -381,7 +383,7 @@ function Settings(p: player, lp: number):
 
 		open last gui to {_p}
 
-function CheckLoc(p: player, b: block):
+function CheckLoc(p: player, b: block): # Check if the player is at a location
 	if {Volume::%{_p}'s uuid%} is not set:
 		set {Volume::%{_p}'s uuid%} to {@DefaultVolume}
 	if {Effect::%{_p}'s uuid%} is not set:
@@ -393,9 +395,7 @@ function CheckLoc(p: player, b: block):
 	loop {-Locations::*}:
 		#send "Looping %loop-value%" to {_p}
 
-		distance between loop-value's location and {_b}'s location is smaller than 5
-
-		set {_FoundLocation} to true
+		distance between loop-value's location and {_b}'s location is smaller than 3
 
 		#loop-value's x-coordinate is floor({_b}'s x-coordinate) or ceil({_b}'s x-coordinate)
 
@@ -438,7 +438,7 @@ on first join:
 #		#wait 1 tick
 #		CheckLoc(event-player, event-block)
 
-command /resetws:
+command /resetws: # Reset the player's locations
 	permission: op
 	trigger:
 		delete {ExcluderStatus::%player's uuid%::*}
@@ -455,7 +455,7 @@ command /resetws:
 		set {MostVisited.%player's uuid%.Counter} to 0
 		set {Teleported.%player's uuid%} to 0
 
-command /dws:
+command /dws: # Debug command to check if the player has the correct locations
 	permission: op
 	trigger:
 		send {Visited::%player's uuid%::Locations::*} to player
