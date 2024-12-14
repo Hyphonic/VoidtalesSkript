@@ -23,15 +23,15 @@ jobs:
                 "fields": [
                   {
                     "name": "Commit ⚡",
-                    "value": "Message » `${{ github.event.head_commit.message }}`\n\nCommit SHA » `${{ github.sha }}`"
+                    "value": "Message » \"${{ github.event.head_commit.message }}\"\n\nCommit SHA » \"${{ github.sha }}\""
                   },
                   {
                     "name": "Workflow ☢️",
-                    "value": "Branch  » `${{ github.ref }}`\n\nWorkflow Runtime » `${{  }}`"
+                    "value": "Branch  » \"${{ github.ref }}\"\n\nWorkflow Runtime » \"${{  }}\""
                   },
                   {
                     "name": "Release 📦",
-                    "value": "Download » `${{  }}`"
+                    "value": "Download » \"${{  }}\""
                   }
                 ],
                 "author": {
@@ -63,5 +63,5 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Delete File
+      - name: Delete JSON file
         run: rm file.json
