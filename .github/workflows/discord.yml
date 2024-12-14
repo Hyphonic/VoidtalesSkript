@@ -17,7 +17,7 @@ jobs:
         # Webhook URL from discord. See: https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks for details
         webhook-url: 
         # Message that is sent via the webhook.
-        content: # optional
+        content: null
         # ID of the thread you want the webhook to send the message into (will automatically unarchive threads)
         thread-id: # optional
         # Name of the thread you want the webhook to create
@@ -37,17 +37,17 @@ jobs:
         # Name of a file that will be uploaded via the webhook
         filename: # optional
         # Embed title
-        embed-title: # optional
+        embed-title: "New Release 🧰"
         # Embed URL
         embed-url: # optional
         # Embed description
-        embed-description: # optional
+        embed-description: 
         # Embed timestamp (ISO8601 format)
         embed-timestamp: # optional
         # Embed color (integer)
-        embed-color: # optional
+        embed-color: 6291288
         # Embed footer text
-        embed-footer-text: # optional
+        embed-footer-text: "[Main Repository 🔑](https://github.com/Hyphonic/Conquest)"
         # Embed footer icon url
         embed-footer-icon-url: # optional
         # Embed image url
@@ -55,9 +55,8 @@ jobs:
         # Embed thumbnail url
         embed-thumbnail-url: # optional
         # Embed embed author name
-        embed-author-name: # optional
+        embed-author-name: "${{ github.actor.login }}"
         # Embed author url
         embed-author-url: # optional
         # Embed author icon
         embed-author-icon-url: # optional
-            
