@@ -1,4 +1,4 @@
-name: Create and Send JSON to Discord
+name: Send JSON to Discord
 
 on:
   push:
@@ -6,32 +6,40 @@ on:
       - main
 
 jobs:
-  generate-json:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Create File
-        uses: devops-actions/json-to-file@v1.0.4
-        with:
-          json: '{"content":null,"embeds":[{"title":"New Release 🧰","color":6291288,"fields":[{"name":"Commit ⚡","value":"Message » `${{ github.event.head_commit.message }}`\n\nCommit SHA » `${{ github.sha }}`"},{"name":"Workflow ☢️","value":"Branch  » `${{ github.ref.name }}`\n\nWorkflow Runtime » `${{  }}`"},{"name":"Release 📦","value":"Download » `${{  }}`"}],"author":{"name":"${{ github.actor.login }}"},"footer":{"text":"[Main Repository 🔑](https://github.com/Hyphonic/Conquest)"}}],"attachments":[]}'
-          filename: file.json
-
   send-webhook:
     runs-on: ubuntu-latest
-    needs: generate-json
-    steps:
-      - uses: actions/checkout@v2
-      - name: Send Webhook
-        uses: tsickert/discord-webhook@v6.0.0
-        with:
-          webhook-url: ${{ secrets.WEBHOOK_URL }}
-          raw-data: file.json
-
-  cleanup:
-    runs-on: ubuntu-latest
-    needs: send-webhook
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
 
-      - name: Delete JSON file
-        run: rm file.json
+      - name: Send JSON to Discord
+        run: |
+          curl -H "Content-Type: application/json" -d '{
+            "content": null,
+            "embeds": [
+              {
+                "title": "New Release 🧰",
+                "color": 6291288,
+                "fields": [
+                  {
+                    "name": "Commit ⚡",
+                    "value": "Message » \"${{ github.event.head_commit.message }}\"\n\nCommit SHA » \"${{ github.sha }}\""
+                  },
+                  {
+                    "name": "Workflow ☢️",
+                    "value": "Branch  » \"${{ github.ref }}\"\n\nWorkflow Runtime » \"${{  }}\""
+                  },
+                  {
+                    "name": "Release 📦",
+                    "value": "Download » \"${{  }}\""
+                  }
+                ],
+                "author": {
+                  "name": "${{ github.actor }}"
+                },
+                "footer": {
+                  "text": "[Main Repository 🔑](https://github.com/Hyphonic/Conquest)"
+                }
+              }
+            ],
+            "attachments": []
+          }' ${{ secrets.DISCORD_WEBHOOK_URL }}
