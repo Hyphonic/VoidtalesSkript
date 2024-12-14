@@ -13,13 +13,11 @@ jobs:
       - name: Get Release Size
         id: get_size
         run: |
-          file_url="https://example.com/direct-download-url"
-          size=$(curl -sI $file_url | grep -i Content-Length | awk '{print $2}')
+          size=$(curl -sI https://github.com/${{ github.repository }}/releases/latest/download/Conquest.zip | grep -i Content-Length | awk '{print $2}')
           echo "size=$size" >> $GITHUB_ENV
       - name: Extract branch name
         shell: bash
-        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
-        id: extract_branch
+        run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_ENV
       - uses: actions/checkout@v2
       - name: Discord Webhook Action
         uses: tsickert/discord-webhook@v6.0.0
@@ -36,8 +34,8 @@ jobs:
             Commit Author » `${{ github.event.head_commit.author.name }}`
             ### Workflow ☢️
             Runner OS » `${{ runner.os }}`
-            Branch » `${{ steps.extract_branch.outputs.branch }}`
+            Branch » `${{ env.branch }}`
             ### Release 📦
-            Download » `https://github.com/${{ github.repository }}/releases/latest/download/Conquest.zip`
+            Download » [Click here to download](https://github.com/${{ github.repository }}/releases/latest/download/Conquest.zip)`
             Size » `${{ env.size }}`
             Version » `1.21`
