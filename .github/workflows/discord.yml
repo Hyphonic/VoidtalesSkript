@@ -9,8 +9,6 @@ jobs:
   send-webhook:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-
       - name: Send JSON to Discord
         run: |
           curl -H "Content-Type: application/json" -d '{
