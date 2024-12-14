@@ -23,9 +23,8 @@ jobs:
         uses: tsickert/discord-webhook@v6.0.0
         with:
           webhook-url: ${{ secrets.WEBHOOK_URL }}
-          embed-title: "New Release 🔔"
-          embed-author-name: by ${{ github.actor }}
-          embed-author-url: https://github.com/Hyphonic/Conquest
+          embed-title: New Release 🔔
+          embed-url: https://github.com/${{ github.repository }}
           embed-color: 3535423
           embed-description: |
             ### Commit ⚡
@@ -36,6 +35,6 @@ jobs:
             Runner OS » `${{ runner.os }}`
             Branch » `${{ env.branch }}`
             ### Release 📦
-            Download » [Click here to download](https://github.com/${{ github.repository }}/releases/latest/download/Conquest.zip)`
+            Download » [Click here to download ⏬](https://github.com/${{ github.repository }}/releases/latest/download/Conquest.zip)
             Size » `${{ env.size }}`
-            Version » `1.21`
+            Version » `1.21.1`
