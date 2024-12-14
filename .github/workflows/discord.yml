@@ -15,16 +15,16 @@ jobs:
         with:
           webhook-url: ${{ secrets.WEBHOOK_URL }}
           embed-title: "New Release 🔔"
-          embed-author-name: ${{ github.actor }}
+          embed-author-name: by ${{ github.actor }}
           embed-description: |
-            ## Commit ⚡
-            Message » "${{ github.event.head_commit.message }}"
+            ### Commit ⚡
+            Message » `${{ github.event.head_commit.message }}`
 
-            Commit SHA » "${{ github.sha }}"
+            Commit SHA » `${{ github.sha }}`
             
-            ## Workflow ☢️
-            Branch  » "${{ github.ref }}"
+            ### Workflow ☢️
+            Branch  » `${{ github.ref }}`
 
-            ## Release 📦
-            Download » ""
-          embed-footer-text: '[Main Repository 🔑](https://github.com/Hyphonic/Conquest)'
+            ### Release 📦
+            Download » ``
+          embed-footer-text: '[Visit_Repository](https://github.com/Hyphonic/Conquest)'
