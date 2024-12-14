@@ -14,4 +14,4 @@ jobs:
         uses: tsickert/discord-webhook@v6.0.0
         with:
           webhook-url: ${{ secrets.WEBHOOK_URL }}
-          raw-data: Webhook.json
+          raw-data: .github/workflows/Webhook.json
