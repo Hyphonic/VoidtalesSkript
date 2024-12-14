@@ -40,4 +40,4 @@ jobs:
               }
             ],
             "attachments": []
-          }' ${{ secrets.DISCORD_WEBHOOK_URL }}
+          }' ${{ secrets.WEBHOOK_URL }}
