@@ -9,9 +9,9 @@ jobs:
   send-webhook:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Send JSON to Discord
-        run: |
-          curl -H "Content-Type: application/json" -d @.github/workflows/Webhook.json ${{ secrets.WEBHOOK_URL }}
+      - uses: actions/checkout@v2
+      - name: Discord Webhook Action
+        uses: tsickert/discord-webhook@v6.0.0
+        with:
+          webhook-url: ${{ secrets.WEBHOOK_URL }}
+          raw-data: Webhook.json
