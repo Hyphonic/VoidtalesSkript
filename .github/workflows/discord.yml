@@ -1,6 +1,6 @@
 name: Discord Webhook Test
 on:
-  workflow_dispatch:
+  push
 
 permissions:
   contents: write
@@ -17,10 +17,4 @@ jobs:
         # Webhook URL from discord. See: https://support.discord.com/hc/en-us/articles/228383668-Intro-to-Webhooks for details
         webhook-url: https://discord.com/api/webhooks/1317441657309761636/4tSkeVENfvHnGc2-1xXW-MoF_MXusJEHwpAdEbS9-BLeOuEpfSeoXRUX2RTPlrPxdmLF
         # Embed title
-        embed-title: "New Release 🧰"
-        # Embed color (integer)
-        embed-color: 6291288
-        # Embed footer text
-        embed-footer-text: "[Main Repository 🔑](https://github.com/Hyphonic/Conquest)"
-        # Embed embed author name
-        embed-author-name: "${{ github.actor.login }}"
+        raw-data: '{"content": "See greeting below","embeds": [{"title":"Hello","description":"World"}]}'
