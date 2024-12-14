@@ -10,40 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Create File
-        uses: actions/checkout@v2
-
-      - name: Generate JSON file
-        run: |
-          echo '{
-            "content": null,
-            "embeds": [
-              {
-                "title": "New Release 🧰",
-                "color": 6291288,
-                "fields": [
-                  {
-                    "name": "Commit ⚡",
-                    "value": "Message » \"${{ github.event.head_commit.message }}\"\n\nCommit SHA » \"${{ github.sha }}\""
-                  },
-                  {
-                    "name": "Workflow ☢️",
-                    "value": "Branch  » \"${{ github.ref }}\"\n\nWorkflow Runtime » \"${{  }}\""
-                  },
-                  {
-                    "name": "Release 📦",
-                    "value": "Download » \"${{  }}\""
-                  }
-                ],
-                "author": {
-                  "name": "${{ github.actor }}"
-                },
-                "footer": {
-                  "text": "[Main Repository 🔑](https://github.com/Hyphonic/Conquest)"
-                }
-              }
-            ],
-            "attachments": []
-          }' > file.json
+        uses: devops-actions/json-to-file@v1.0.4
+        with:
+          json: '{"content":null,"embeds":[{"title":"New Release 🧰","color":6291288,"fields":[{"name":"Commit ⚡","value":"Message » `${{ github.event.head_commit.message }}`\n\nCommit SHA » `${{ github.sha }}`"},{"name":"Workflow ☢️","value":"Branch  » `${{ github.ref.name }}`\n\nWorkflow Runtime » `${{  }}`"},{"name":"Release 📦","value":"Download » `${{  }}`"}],"author":{"name":"${{ github.actor.login }}"},"footer":{"text":"[Main Repository 🔑](https://github.com/Hyphonic/Conquest)"}}],"attachments":[]}'
+          filename: file.json
 
   send-webhook:
     runs-on: ubuntu-latest
