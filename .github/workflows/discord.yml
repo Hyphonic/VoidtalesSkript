@@ -9,35 +9,9 @@ jobs:
   send-webhook:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
       - name: Send JSON to Discord
         run: |
-          curl -H "Content-Type: application/json" -d '{
-            "content": null,
-            "embeds": [
-              {
-                "title": "New Release 🧰",
-                "color": 6291288,
-                "fields": [
-                  {
-                    "name": "Commit ⚡",
-                    "value": "Message » \"'"'"'${{ github.event.head_commit.message }}'"'"'\"\n\nCommit SHA » \"'"'"'${{ github.sha }}'"'"'\""
-                  },
-                  {
-                    "name": "Workflow ☢️",
-                    "value": "Branch  » \"'"'"'${{ github.ref }}'"'"'\"\n\nWorkflow Runtime » \"\""
-                  },
-                  {
-                    "name": "Release 📦",
-                    "value": "Download » \"\""
-                  }
-                ],
-                "author": {
-                  "name": "'"'"'${{ github.actor }}'"'"'"
-                },
-                "footer": {
-                  "text": "[Main Repository 🔑](https://github.com/Hyphonic/Conquest)"
-                }
-              }
-            ],
-            "attachments": []
-          }' ${{ secrets.WEBHOOK_URL }}
+          curl -H "Content-Type: application/json" -d @.github/workflows/Webhook.json ${{ secrets.WEBHOOK_URL }}
