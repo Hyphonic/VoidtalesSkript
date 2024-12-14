@@ -1,0 +1,30 @@
+{
+  "content": null,
+  "embeds": [
+    {
+      "title": "New Release 🧰",
+      "color": 6291288,
+      "fields": [
+        {
+          "name": "Commit ⚡",
+          "value": "Message » `${{ github.event.head_commit.message }}`\n\nCommit SHA » `${{ github.sha }}`"
+        },
+        {
+          "name": "Workflow ☢️",
+          "value": "Branch  » `${{ github.ref.name }}`\n\nWorkflow Runtime » `${{  }}`"
+        },
+        {
+          "name": "Release 📦",
+          "value": "Download » `${{  }}`"
+        }
+      ],
+      "author": {
+        "name": "${{ github.actor.login }}"
+      },
+      "footer": {
+        "text": "[Main Repository 🔑](https://github.com/Hyphonic/Conquest)"
+      }
+    }
+  ],
+  "attachments": []
+}
