@@ -13,7 +13,7 @@ jobs:
       - name: Get Release Size
         id: get_size
         run: |
-          curl -L -o release.zip https://github.com/${{ github.repository }}/releases/latest/download/Conquest.zip
+          curl -L -o release.zip https://github.com/Hyphonic/Conquest/releases/latest/download/Conquest.zip
           size=$(du -m release.zip | cut -f1)
           echo "size=$size MB" >> $GITHUB_ENV
       - name: Extract branch name
