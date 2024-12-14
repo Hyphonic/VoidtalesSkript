@@ -14,4 +14,17 @@ jobs:
         uses: tsickert/discord-webhook@v6.0.0
         with:
           webhook-url: ${{ secrets.WEBHOOK_URL }}
-          raw-data: .github/workflows/Webhook.json
+          embed-author-name: ${{ github.actor.login }}
+          embed-description: |
+            ## Commit ⚡
+            Message » `${{ github.event.head_commit.message }}`
+
+            Commit SHA » `${{ github.sha }}`
+            
+            ## Workflow ☢️
+            Branch  » `${{ github.ref.name }}`
+
+            ## Release 📦
+            Download » `${{  }}`
+          embed-color: 5fff58
+          embed-footer-text: '[Main Repository 🔑](https://github.com/Hyphonic/Conquest)'
