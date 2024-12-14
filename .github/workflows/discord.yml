@@ -10,21 +10,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Get Release Size
+        id: get_size
+        run: |
+          file_url="https://example.com/direct-download-url"
+          size=$(curl -sI $file_url | grep -i Content-Length | awk '{print $2}')
+          echo "size=$size" >> $GITHUB_ENV
+      - uses: actions/checkout@v2
       - name: Discord Webhook Action
         uses: tsickert/discord-webhook@v6.0.0
         with:
           webhook-url: ${{ secrets.WEBHOOK_URL }}
           embed-title: "New Release 🔔"
           embed-author-name: by ${{ github.actor }}
+          embed-author-url: https://github.com/Hyphonic/Conquest
           embed-description: |
             ### Commit ⚡
             Message » `${{ github.event.head_commit.message }}`
-
             Commit SHA » `${{ github.sha }}`
-            
+            Commit Author » `${{ github.event.head_commit.author.name }}`
             ### Workflow ☢️
-            Branch  » `${{ github.ref }}`
-
+            Runtime (minutes) » `${{ github.event.workflow_run.run_duration_ms / 60000 }}`
+            Runner OS » `${{ runner.os }}`
             ### Release 📦
-            Download » ``
-          embed-footer-text: '[Visit_Repository](https://github.com/Hyphonic/Conquest)'
+            Download » `https://github.com/${{ github.repository }}/releases/latest/download/Conquest.zip`
+            Size » `${{ env.size }}`
+            Version » `1.21`
